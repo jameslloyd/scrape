@@ -1,7 +1,11 @@
 from config import Config
-import random, requests
+import random, requests, logging
+
+logging.basicConfig(format=Config.LOGGING_FORMAT,level=Config.LOGGING_LEVEL,datefmt=Config.LOGGING_DATEFMT)
+
 
 def get_html(url, proxy = Config.PROXY_ENABLE):
+    
     useragents = ['Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36',
             'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36',
             'Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36',
@@ -11,10 +15,11 @@ def get_html(url, proxy = Config.PROXY_ENABLE):
         if proxy == '':
             proxy = False
         else:
-            proxy = {"http":proxy,"https":proxy}
+            proxyh = {"http":proxy,"https":proxy}
     useragent = random.choice(useragents)
     headers = {"User-Agent": useragent}
-    output = requests.get(url, headers=headers,proxies=proxy)
+    output = requests.get(url, headers=headers,proxies=proxyh)
+    logging.info(f'requesting {url} with useragent {useragent} and proxy {proxy}')
     return output
     
     
